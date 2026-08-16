@@ -11,6 +11,8 @@ import {
   ArrowLeft,
   ArrowRight,
   Grid3x3,
+  UsersRound,
+  Pencil,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -25,6 +27,8 @@ import { PURPOSES, TOTAL_QUESTIONS } from "@/lib/ase-content";
 import { StatusBadge } from "@/components/ase/status-badge";
 import { CreateAssessmentDialog } from "@/components/ase/create-assessment-dialog";
 import { ThemeToggle } from "@/components/ase/theme-toggle";
+import { GroupDialog } from "@/components/ase/group-dialog";
+import { groupStore, useGroups, type Group } from "@/lib/group-store";
 
 export const Route = createFileRoute("/matrix")({
   head: () => ({
@@ -43,6 +47,14 @@ export const Route = createFileRoute("/matrix")({
 function MatrixHome() {
   const assessments = useAssessments();
   const [open, setOpen] = useState(false);
+  const groups = useGroups();
+  const [groupOpen, setGroupOpen] = useState(false);
+  const [editing, setEditing] = useState<Group | null>(null);
+
+  const openGroup = (g: Group | null) => {
+    setEditing(g);
+    setGroupOpen(true);
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -85,6 +97,9 @@ function MatrixHome() {
             <Button size="lg" onClick={() => setOpen(true)}>
               <Plus className="size-4" /> Nova avaliação
             </Button>
+            <Button size="lg" variant="outline" onClick={() => openGroup(null)}>
+              <UsersRound className="size-4" /> Cadastrar Grupo
+            </Button>
             <div className="flex flex-wrap gap-1.5">
             {PURPOSES.map((p) => (
               <span
@@ -96,6 +111,122 @@ function MatrixHome() {
             ))}
             </div>
           </div>
+        </section>
+
+        <section className="mb-10">
+          <div className="mb-4 flex items-center justify-between gap-3">
+            <h2 className="font-display text-lg font-semibold">
+              Grupos cadastrados
+            </h2>
+            {groups.length > 0 && (
+              <Button variant="ghost" size="sm" onClick={() => openGroup(null)}>
+                <Plus className="size-4" /> Novo grupo
+              </Button>
+            )}
+          </div>
+
+          {groups.length === 0 ? (
+            <button
+              onClick={() => openGroup(null)}
+              className="flex w-full flex-col items-center justify-center gap-2 rounded-2xl border border-dashed bg-card/50 px-6 py-10 text-center transition hover:border-primary/50 hover:bg-accent/40"
+            >
+              <div className="grid size-11 place-items-center rounded-full bg-accent text-primary">
+                <UsersRound className="size-5" />
+              </div>
+              <div className="font-display font-semibold">
+                Cadastrar seu primeiro grupo
+              </div>
+              <p className="max-w-md text-sm text-muted-foreground">
+                Salve rede, supervisor, condutor e membros uma única vez. Cada
+                membro ganha um código único e você reutiliza tudo ao criar uma
+                nova avaliação.
+              </p>
+            </button>
+          ) : (
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {groups.map((g) => (
+                <div
+                  key={g.id}
+                  className="flex flex-col rounded-2xl border bg-card p-5 shadow-soft transition hover:shadow-pop"
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="min-w-0">
+                      <h3 className="truncate font-display font-semibold">
+                        {g.name}
+                      </h3>
+                      <p className="mt-0.5 truncate text-xs text-muted-foreground">
+                        {[g.network, g.supervisor && `Sup. ${g.supervisor}`, g.conductor && `Cond. ${g.conductor}`]
+                          .filter(Boolean)
+                          .join(" · ") || "Sem detalhes"}
+                      </p>
+                    </div>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="size-8 shrink-0 text-muted-foreground"
+                        >
+                          <MoreVertical className="size-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={() => openGroup(g)}>
+                          <Pencil className="size-4" /> Editar
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          className="text-destructive focus:text-destructive"
+                          onClick={() => {
+                            if (confirm(`Excluir o grupo "${g.name}"?`))
+                              groupStore.remove(g.id);
+                          }}
+                        >
+                          <Trash2 className="size-4" /> Excluir
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+
+                  <div className="mt-3 flex flex-wrap gap-1.5">
+                    {g.members.slice(0, 6).map((m) => (
+                      <span
+                        key={m.id}
+                        title={m.code}
+                        className="inline-flex items-center gap-1 rounded-full border bg-muted/60 px-2 py-0.5 text-xs"
+                      >
+                        {m.name}
+                        <span className="font-mono text-[10px] text-muted-foreground">
+                          {m.code}
+                        </span>
+                      </span>
+                    ))}
+                    {g.members.length > 6 && (
+                      <span className="text-xs text-muted-foreground">
+                        +{g.members.length - 6}
+                      </span>
+                    )}
+                    {g.members.length === 0 && (
+                      <span className="text-xs text-muted-foreground">
+                        Sem membros
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="mt-4 flex items-center justify-between text-xs text-muted-foreground">
+                    <span className="inline-flex items-center gap-1">
+                      <Users className="size-3.5" /> {g.members.length} membros
+                    </span>
+                    <button
+                      onClick={() => setOpen(true)}
+                      className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
+                    >
+                      Nova avaliação <ArrowRight className="size-3.5" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </section>
 
         <section>
@@ -226,6 +357,11 @@ function MatrixHome() {
       </main>
 
       <CreateAssessmentDialog open={open} onOpenChange={setOpen} />
+      <GroupDialog
+        open={groupOpen}
+        onOpenChange={setGroupOpen}
+        group={editing}
+      />
     </div>
   );
 }

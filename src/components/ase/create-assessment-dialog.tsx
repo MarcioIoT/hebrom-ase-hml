@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/select";
 import { store, useAssessments } from "@/lib/ase-store";
 import { REDES } from "@/lib/ase-types";
+import { useGroups } from "@/lib/group-store";
 
 const monthLabel = () => {
   const d = new Date();
@@ -37,12 +38,16 @@ export function CreateAssessmentDialog({
 }) {
   const navigate = useNavigate();
   const assessments = useAssessments();
+  const groups = useGroups();
   const [name, setName] = useState(monthLabel());
   const [network, setNetwork] = useState<string>("");
   const [supervisor, setSupervisor] = useState("");
   const [conductor, setConductor] = useState("");
   const [reuseId, setReuseId] = useState<string>("none");
-  const [members, setMembers] = useState<string[]>([""]);
+  const [groupId, setGroupId] = useState<string>("none");
+  const [members, setMembers] = useState<{ name: string; code?: string }[]>([
+    { name: "" },
+  ]);
 
   const reset = () => {
     setName(monthLabel());
@@ -50,18 +55,38 @@ export function CreateAssessmentDialog({
     setSupervisor("");
     setConductor("");
     setReuseId("none");
-    setMembers([""]);
+    setGroupId("none");
+    setMembers([{ name: "" }]);
+  };
+
+  const applyGroup = (id: string) => {
+    setGroupId(id);
+    if (id === "none") return;
+    const g = groups.find((x) => x.id === id);
+    if (!g) return;
+    setReuseId("none");
+    setNetwork(g.network ?? "");
+    setSupervisor(g.supervisor ?? "");
+    setConductor(g.conductor ?? "");
+    setMembers(
+      g.members.length
+        ? g.members.map((m) => ({ name: m.name, code: m.code }))
+        : [{ name: "" }],
+    );
   };
 
   const applyReuse = (id: string) => {
     setReuseId(id);
     if (id === "none") return;
     const src = assessments.find((a) => a.id === id);
-    if (src) setMembers(src.members.map((m) => m.name));
+    if (src)
+      setMembers(src.members.map((m) => ({ name: m.name, code: m.code })));
   };
 
   const submit = () => {
-    const clean = members.map((m) => m.trim()).filter(Boolean);
+    const clean = members
+      .map((m) => ({ ...m, name: m.name.trim() }))
+      .filter((m) => m.name);
     const a = store.create({
       name,
       conductor,
@@ -135,6 +160,25 @@ export function CreateAssessmentDialog({
           </div>
 
 
+          {groups.length > 0 && (
+            <div className="grid gap-2">
+              <Label>Usar grupo cadastrado</Label>
+              <Select value={groupId} onValueChange={applyGroup}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Grupo pré-cadastrado" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none">Não usar</SelectItem>
+                  {groups.map((g) => (
+                    <SelectItem key={g.id} value={g.id}>
+                      {g.name} · {g.members.length} membros
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+
           {assessments.length > 0 && (
             <div className="grid gap-2">
               <Label>Reutilizar membros de</Label>
@@ -160,21 +204,28 @@ export function CreateAssessmentDialog({
               {members.map((m, i) => (
                 <div key={i} className="flex items-center gap-2">
                   <Input
-                    value={m}
+                    value={m.name}
                     autoFocus={i === members.length - 1 && members.length > 1}
                     onChange={(e) =>
                       setMembers((prev) =>
-                        prev.map((x, xi) => (xi === i ? e.target.value : x)),
+                        prev.map((x, xi) =>
+                          xi === i ? { ...x, name: e.target.value } : x,
+                        ),
                       )
                     }
                     onKeyDown={(e) => {
                       if (e.key === "Enter") {
                         e.preventDefault();
-                        setMembers((prev) => [...prev, ""]);
+                        setMembers((prev) => [...prev, { name: "" }]);
                       }
                     }}
                     placeholder={`Membro ${i + 1}`}
                   />
+                  {m.code && (
+                    <span className="shrink-0 rounded-md border bg-muted px-2 py-1.5 font-mono text-xs text-muted-foreground">
+                      {m.code}
+                    </span>
+                  )}
                   {members.length > 1 && (
                     <Button
                       variant="ghost"
@@ -194,7 +245,7 @@ export function CreateAssessmentDialog({
               variant="outline"
               size="sm"
               className="w-fit"
-              onClick={() => setMembers((prev) => [...prev, ""])}
+              onClick={() => setMembers((prev) => [...prev, { name: "" }])}
             >
               <Plus className="size-4" /> Adicionar membro
             </Button>
