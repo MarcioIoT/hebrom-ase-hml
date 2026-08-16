@@ -160,6 +160,25 @@ export function CreateAssessmentDialog({
           </div>
 
 
+          {groups.length > 0 && (
+            <div className="grid gap-2">
+              <Label>Usar grupo cadastrado</Label>
+              <Select value={groupId} onValueChange={applyGroup}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Grupo pré-cadastrado" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none">Não usar</SelectItem>
+                  {groups.map((g) => (
+                    <SelectItem key={g.id} value={g.id}>
+                      {g.name} · {g.members.length} membros
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+
           {assessments.length > 0 && (
             <div className="grid gap-2">
               <Label>Reutilizar membros de</Label>
@@ -185,21 +204,28 @@ export function CreateAssessmentDialog({
               {members.map((m, i) => (
                 <div key={i} className="flex items-center gap-2">
                   <Input
-                    value={m}
+                    value={m.name}
                     autoFocus={i === members.length - 1 && members.length > 1}
                     onChange={(e) =>
                       setMembers((prev) =>
-                        prev.map((x, xi) => (xi === i ? e.target.value : x)),
+                        prev.map((x, xi) =>
+                          xi === i ? { ...x, name: e.target.value } : x,
+                        ),
                       )
                     }
                     onKeyDown={(e) => {
                       if (e.key === "Enter") {
                         e.preventDefault();
-                        setMembers((prev) => [...prev, ""]);
+                        setMembers((prev) => [...prev, { name: "" }]);
                       }
                     }}
                     placeholder={`Membro ${i + 1}`}
                   />
+                  {m.code && (
+                    <span className="shrink-0 rounded-md border bg-muted px-2 py-1.5 font-mono text-xs text-muted-foreground">
+                      {m.code}
+                    </span>
+                  )}
                   {members.length > 1 && (
                     <Button
                       variant="ghost"
@@ -219,7 +245,7 @@ export function CreateAssessmentDialog({
               variant="outline"
               size="sm"
               className="w-fit"
-              onClick={() => setMembers((prev) => [...prev, ""])}
+              onClick={() => setMembers((prev) => [...prev, { name: "" }])}
             >
               <Plus className="size-4" /> Adicionar membro
             </Button>
