@@ -245,7 +245,7 @@ export async function parseAseWorkbook(file: File): Promise<ParsedAse> {
     const mid = r["ID do membro"];
     const pid = r["ID do proposito"];
     const text = r["Observacao"];
-    if (!mid || !validPurposes.has(pid) || !text) continue;
+    if (!mid || !validPurposes.has(pid as never) || !text) continue;
     (notes[mid] ??= {})[pid] = text;
   }
 
