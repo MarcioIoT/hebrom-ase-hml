@@ -234,6 +234,50 @@ export const store = {
   },
 
 
+  /** Cria uma avaliação a partir de um arquivo padrão ASE (Excel). */
+  importAssessment(input: {
+    name: string;
+    network?: string;
+    supervisor?: string;
+    conductor?: string;
+    members: { id: string; name: string; code?: string }[];
+    scores: Record<string, Record<string, ScoreValue>>;
+    notes?: Record<string, Record<string, string>>;
+  }): Assessment {
+    const now = new Date().toISOString();
+    const map = new Map<string, string>();
+    const members: Member[] = input.members.map((m) => {
+      const id = uid();
+      map.set(m.id, id);
+      return { id, name: m.name.trim() || m.code || "Membro", code: m.code };
+    });
+    const scores: ScoreMap = {};
+    for (const [oldId, row] of Object.entries(input.scores)) {
+      const id = map.get(oldId);
+      if (id) scores[id] = { ...row };
+    }
+    const notes: NotesMap = {};
+    for (const [oldId, row] of Object.entries(input.notes ?? {})) {
+      const id = map.get(oldId);
+      if (id) notes[id] = { ...row };
+    }
+    const a: Assessment = {
+      id: uid(),
+      name: input.name.trim() || "Avaliação importada",
+      network: input.network?.trim() || undefined,
+      supervisor: input.supervisor?.trim() || undefined,
+      conductor: input.conductor?.trim() || "",
+      createdAt: now,
+      updatedAt: now,
+      finishedAt: null,
+      members,
+      scores,
+      notes,
+    };
+    mutate((list) => [a, ...list]);
+    return a;
+  },
+
   finish(id: string) {
     mutate((list) =>
       list.map((a) =>
