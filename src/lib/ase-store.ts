@@ -1,5 +1,11 @@
 import { useSyncExternalStore } from "react";
-import type { Assessment, Member, ScoreValue } from "./ase-types";
+import type {
+  Assessment,
+  Member,
+  NotesMap,
+  ScoreMap,
+  ScoreValue,
+} from "./ase-types";
 
 // ---------------------------------------------------------------------------
 // Local-first store. All assessments live in localStorage under a single key.
