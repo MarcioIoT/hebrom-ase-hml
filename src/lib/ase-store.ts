@@ -83,13 +83,15 @@ export const store = {
     conductor: string;
     network?: string;
     supervisor?: string;
-    members?: string[];
+    groupId?: string;
+    members?: (string | { name: string; code?: string })[];
   }): Assessment {
     const now = new Date().toISOString();
     const members: Member[] = (input.members ?? [])
-      .map((n) => n.trim())
-      .filter(Boolean)
-      .map((name) => ({ id: uid(), name }));
+      .map((m) => (typeof m === "string" ? { name: m } : m))
+      .map((m) => ({ ...m, name: m.name.trim() }))
+      .filter((m) => m.name)
+      .map((m) => ({ id: uid(), name: m.name, code: m.code }));
     const a: Assessment = {
       id: uid(),
       name: input.name.trim() || "Nova avaliação",
