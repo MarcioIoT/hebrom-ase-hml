@@ -9,29 +9,19 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
-import { Route as RelatorioRouteImport } from './routes/relatorio'
-import { Route as MatrixRouteImport } from './routes/matrix'
-import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as MatrixRouteImport } from './routes/matrix'
+import { Route as RelatorioRouteImport } from './routes/relatorio'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as AvaliacaoIdRouteImport } from './routes/avaliacao.$id'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
 import { Route as DashboardIdRouteImport } from './routes/dashboard.$id'
-import { Route as AvaliacaoIdRouteImport } from './routes/avaliacao.$id'
 import { Route as DashboardGrupoIdRouteImport } from './routes/dashboard.grupo.$id'
 
-const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
-  id: '/sitemap.xml',
-  path: '/sitemap.xml',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RelatorioRoute = RelatorioRouteImport.update({
-  id: '/relatorio',
-  path: '/relatorio',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MatrixRoute = MatrixRouteImport.update({
-  id: '/matrix',
-  path: '/matrix',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardRoute = DashboardRouteImport.update({
@@ -39,9 +29,24 @@ const DashboardRoute = DashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const MatrixRoute = MatrixRouteImport.update({
+  id: '/matrix',
+  path: '/matrix',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RelatorioRoute = RelatorioRouteImport.update({
+  id: '/relatorio',
+  path: '/relatorio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AvaliacaoIdRoute = AvaliacaoIdRouteImport.update({
+  id: '/avaliacao/$id',
+  path: '/avaliacao/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardIndexRoute = DashboardIndexRouteImport.update({
@@ -53,11 +58,6 @@ const DashboardIdRoute = DashboardIdRouteImport.update({
   id: '/$id',
   path: '/$id',
   getParentRoute: () => DashboardRoute,
-} as any)
-const AvaliacaoIdRoute = AvaliacaoIdRouteImport.update({
-  id: '/avaliacao/$id',
-  path: '/avaliacao/$id',
-  getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardGrupoIdRoute = DashboardGrupoIdRouteImport.update({
   id: '/grupo/$id',
@@ -144,25 +144,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/sitemap.xml': {
-      id: '/sitemap.xml'
-      path: '/sitemap.xml'
-      fullPath: '/sitemap.xml'
-      preLoaderRoute: typeof SitemapDotxmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/relatorio': {
-      id: '/relatorio'
-      path: '/relatorio'
-      fullPath: '/relatorio'
-      preLoaderRoute: typeof RelatorioRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/matrix': {
-      id: '/matrix'
-      path: '/matrix'
-      fullPath: '/matrix'
-      preLoaderRoute: typeof MatrixRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard': {
@@ -172,11 +158,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/matrix': {
+      id: '/matrix'
+      path: '/matrix'
+      fullPath: '/matrix'
+      preLoaderRoute: typeof MatrixRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/relatorio': {
+      id: '/relatorio'
+      path: '/relatorio'
+      fullPath: '/relatorio'
+      preLoaderRoute: typeof RelatorioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/avaliacao/$id': {
+      id: '/avaliacao/$id'
+      path: '/avaliacao/$id'
+      fullPath: '/avaliacao/$id'
+      preLoaderRoute: typeof AvaliacaoIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard/': {
@@ -192,13 +199,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard/$id'
       preLoaderRoute: typeof DashboardIdRouteImport
       parentRoute: typeof DashboardRoute
-    }
-    '/avaliacao/$id': {
-      id: '/avaliacao/$id'
-      path: '/avaliacao/$id'
-      fullPath: '/avaliacao/$id'
-      preLoaderRoute: typeof AvaliacaoIdRouteImport
-      parentRoute: typeof rootRouteImport
     }
     '/dashboard/grupo/$id': {
       id: '/dashboard/grupo/$id'
