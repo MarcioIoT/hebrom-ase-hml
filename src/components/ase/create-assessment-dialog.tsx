@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/select";
 import { store, useAssessments } from "@/lib/ase-store";
 import { REDES } from "@/lib/ase-types";
+import { useGroups } from "@/lib/group-store";
 
 const monthLabel = () => {
   const d = new Date();
