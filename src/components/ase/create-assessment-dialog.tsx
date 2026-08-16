@@ -38,12 +38,16 @@ export function CreateAssessmentDialog({
 }) {
   const navigate = useNavigate();
   const assessments = useAssessments();
+  const groups = useGroups();
   const [name, setName] = useState(monthLabel());
   const [network, setNetwork] = useState<string>("");
   const [supervisor, setSupervisor] = useState("");
   const [conductor, setConductor] = useState("");
   const [reuseId, setReuseId] = useState<string>("none");
-  const [members, setMembers] = useState<string[]>([""]);
+  const [groupId, setGroupId] = useState<string>("none");
+  const [members, setMembers] = useState<{ name: string; code?: string }[]>([
+    { name: "" },
+  ]);
 
   const reset = () => {
     setName(monthLabel());
@@ -51,18 +55,38 @@ export function CreateAssessmentDialog({
     setSupervisor("");
     setConductor("");
     setReuseId("none");
-    setMembers([""]);
+    setGroupId("none");
+    setMembers([{ name: "" }]);
+  };
+
+  const applyGroup = (id: string) => {
+    setGroupId(id);
+    if (id === "none") return;
+    const g = groups.find((x) => x.id === id);
+    if (!g) return;
+    setReuseId("none");
+    setNetwork(g.network ?? "");
+    setSupervisor(g.supervisor ?? "");
+    setConductor(g.conductor ?? "");
+    setMembers(
+      g.members.length
+        ? g.members.map((m) => ({ name: m.name, code: m.code }))
+        : [{ name: "" }],
+    );
   };
 
   const applyReuse = (id: string) => {
     setReuseId(id);
     if (id === "none") return;
     const src = assessments.find((a) => a.id === id);
-    if (src) setMembers(src.members.map((m) => m.name));
+    if (src)
+      setMembers(src.members.map((m) => ({ name: m.name, code: m.code })));
   };
 
   const submit = () => {
-    const clean = members.map((m) => m.trim()).filter(Boolean);
+    const clean = members
+      .map((m) => ({ ...m, name: m.name.trim() }))
+      .filter((m) => m.name);
     const a = store.create({
       name,
       conductor,
