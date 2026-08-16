@@ -32,6 +32,8 @@ export interface Question {
 export interface Member {
   id: string;
   name: string;
+  /** Código único do membro vindo do pré-cadastro de grupos (anonimização) */
+  code?: string;
 }
 
 /** scores[memberId][questionId] = 1..5 */
