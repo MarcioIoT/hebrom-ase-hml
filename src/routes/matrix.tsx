@@ -100,6 +100,7 @@ function MatrixHome() {
             <Button size="lg" variant="outline" onClick={() => openGroup(null)}>
               <UsersRound className="size-4" /> Cadastrar Grupo
             </Button>
+            <ImportExcelButton />
             <div className="flex flex-wrap gap-1.5">
             {PURPOSES.map((p) => (
               <span
