@@ -254,6 +254,7 @@ export async function parseAseWorkbook(file: File): Promise<ParsedAse> {
 
   return {
     name: info.get("Grupo") || "Avaliação importada",
+    groupName: info.get("Grupo") || undefined,
     network: info.get("Rede") || undefined,
     supervisor: info.get("Supervisor") || undefined,
     conductor: info.get("Condutor") || "",
