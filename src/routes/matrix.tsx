@@ -28,6 +28,7 @@ import { StatusBadge } from "@/components/ase/status-badge";
 import { CreateAssessmentDialog } from "@/components/ase/create-assessment-dialog";
 import { ThemeToggle } from "@/components/ase/theme-toggle";
 import { GroupDialog } from "@/components/ase/group-dialog";
+import { ImportExcelButton } from "@/components/ase/import-excel-button";
 import { groupStore, useGroups, type Group } from "@/lib/group-store";
 
 export const Route = createFileRoute("/matrix")({
