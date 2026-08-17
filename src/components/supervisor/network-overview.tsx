@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import {
@@ -17,13 +17,6 @@ import {
   User,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { buildNetworkSummary } from "@/lib/network-scoring";
 import { supervisorStore, type SupervisorReport } from "@/lib/supervisor-store";
 import { Gauge } from "@/components/dashboard/gauge";
