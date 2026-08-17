@@ -57,31 +57,13 @@ export function NetworkOverview({
           <span className="inline-flex items-center gap-1.5 rounded-full border bg-background px-2.5 py-1 text-xs font-medium text-muted-foreground">
             <Layers className="size-3.5" /> Visão geral da rede
           </span>
-          <h1 className="mt-3 font-display text-2xl font-bold">
-            {network === "todas" ? "Todas as redes" : network}
-          </h1>
+          <h1 className="mt-3 font-display text-2xl font-bold">{network}</h1>
           <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted-foreground">
             <span>{s.groupCount} grupo(s)</span>
             <span>{s.memberCount} membro(s) avaliado(s)</span>
             <span>de {s.totalMembers} cadastrado(s)</span>
           </div>
-          {allNetworks.length > 1 && (
-            <div className="mt-4 max-w-xs">
-              <Select value={network} onValueChange={setNetwork}>
-                <SelectTrigger className="h-9">
-                  <SelectValue placeholder="Filtrar rede" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="todas">Todas as redes</SelectItem>
-                  {allNetworks.map((n) => (
-                    <SelectItem key={n} value={n}>
-                      {n}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          )}
+
         </div>
 
         <div className="justify-self-center lg:justify-self-end">
