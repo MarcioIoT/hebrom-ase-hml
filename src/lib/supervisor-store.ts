@@ -111,6 +111,7 @@ export const supervisorStore = {
     const report: SupervisorReport = {
       id: uid(),
       name: parsed.name.trim() || "Grupo importado",
+      groupName: parsed.groupName?.trim() || parsed.name.trim() || undefined,
       network: parsed.network?.trim() || undefined,
       supervisor: parsed.supervisor?.trim() || undefined,
       conductor: parsed.conductor?.trim() || "—",
