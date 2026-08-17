@@ -89,7 +89,7 @@ export const store = {
     conductor: string;
     network?: string;
     supervisor?: string;
-    groupId?: string;
+    groupName?: string;
     members?: (string | { name: string; code?: string })[];
   }): Assessment {
     const now = new Date().toISOString();
@@ -101,6 +101,7 @@ export const store = {
     const a: Assessment = {
       id: uid(),
       name: input.name.trim() || "Nova avaliação",
+      groupName: input.groupName?.trim() || undefined,
       network: input.network?.trim() || undefined,
       supervisor: input.supervisor?.trim() || undefined,
       conductor: input.conductor.trim(),
