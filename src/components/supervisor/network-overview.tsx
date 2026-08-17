@@ -34,25 +34,15 @@ import {
   MiniRadar,
 } from "@/components/dashboard/charts";
 
-export function NetworkOverview({ reports }: { reports: SupervisorReport[] }) {
-  const [network, setNetwork] = useState<string>("todas");
+export function NetworkOverview({
+  reports,
+  network,
+}: {
+  reports: SupervisorReport[];
+  network: string;
+}) {
+  const s = useMemo(() => buildNetworkSummary(reports), [reports]);
 
-  const filtered = useMemo(
-    () =>
-      network === "todas"
-        ? reports
-        : reports.filter((r) => (r.network?.trim() || "Sem rede") === network),
-    [reports, network],
-  );
-
-  const s = useMemo(() => buildNetworkSummary(filtered), [filtered]);
-  const allNetworks = useMemo(
-    () =>
-      Array.from(
-        new Set(reports.map((r) => r.network?.trim() || "Sem rede")),
-      ).sort(),
-    [reports],
-  );
 
   return (
     <div className="space-y-6">
