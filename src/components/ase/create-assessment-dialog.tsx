@@ -68,6 +68,7 @@ export function CreateAssessmentDialog({
     setNetwork(g.network ?? "");
     setSupervisor(g.supervisor ?? "");
     setConductor(g.conductor ?? "");
+    setName(g.name);
     setMembers(
       g.members.length
         ? g.members.map((m) => ({ name: m.name, code: m.code }))
@@ -87,11 +88,13 @@ export function CreateAssessmentDialog({
     const clean = members
       .map((m) => ({ ...m, name: m.name.trim() }))
       .filter((m) => m.name);
+    const selectedGroup = groups.find((g) => g.id === groupId);
     const a = store.create({
       name,
       conductor,
       network,
       supervisor,
+      groupName: selectedGroup?.name,
       members: clean,
     });
     reset();
