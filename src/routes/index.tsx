@@ -9,6 +9,8 @@ import {
   Users,
   Radar,
   Zap,
+  Layers,
+  Upload,
 } from "lucide-react";
 import { PURPOSES } from "@/lib/ase-content";
 import { FloatingResourcesButton } from "@/components/ase/floating-resources-button";
@@ -127,7 +129,7 @@ function ModuleCard({
   accent,
   cta,
 }: {
-  to: "/matrix" | "/dashboard";
+  to: "/matrix" | "/dashboard" | "/supervisor";
   icon: React.ReactNode;
   title: string;
   subtitle: string;
