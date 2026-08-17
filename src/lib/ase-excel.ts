@@ -185,6 +185,7 @@ export function exportAseExcel(a: Assessment, opts: ExcelExportOptions = {}) {
 
 export interface ParsedAse {
   name: string;
+  groupName?: string;
   network?: string;
   supervisor?: string;
   conductor: string;
