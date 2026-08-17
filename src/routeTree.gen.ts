@@ -18,6 +18,7 @@ import { Route as SupervisorRouteImport } from './routes/supervisor'
 import { Route as AvaliacaoIdRouteImport } from './routes/avaliacao.$id'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
 import { Route as DashboardIdRouteImport } from './routes/dashboard.$id'
+import { Route as SupervisorIndexRouteImport } from './routes/supervisor.index'
 import { Route as DashboardGrupoIdRouteImport } from './routes/dashboard.grupo.$id'
 
 const IndexRoute = IndexRouteImport.update({
@@ -65,6 +66,11 @@ const DashboardIdRoute = DashboardIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => DashboardRoute,
 } as any)
+const SupervisorIndexRoute = SupervisorIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => SupervisorRoute,
+} as any)
 const DashboardGrupoIdRoute = DashboardGrupoIdRouteImport.update({
   id: '/grupo/$id',
   path: '/grupo/$id',
@@ -77,10 +83,11 @@ export interface FileRoutesByFullPath {
   '/matrix': typeof MatrixRoute
   '/relatorio': typeof RelatorioRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/supervisor': typeof SupervisorRoute
+  '/supervisor': typeof SupervisorRouteWithChildren
   '/avaliacao/$id': typeof AvaliacaoIdRoute
   '/dashboard/$id': typeof DashboardIdRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/supervisor/': typeof SupervisorIndexRoute
   '/dashboard/grupo/$id': typeof DashboardGrupoIdRoute
 }
 export interface FileRoutesByTo {
@@ -88,10 +95,10 @@ export interface FileRoutesByTo {
   '/matrix': typeof MatrixRoute
   '/relatorio': typeof RelatorioRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/supervisor': typeof SupervisorRoute
   '/avaliacao/$id': typeof AvaliacaoIdRoute
   '/dashboard/$id': typeof DashboardIdRoute
   '/dashboard': typeof DashboardIndexRoute
+  '/supervisor': typeof SupervisorIndexRoute
   '/dashboard/grupo/$id': typeof DashboardGrupoIdRoute
 }
 export interface FileRoutesById {
@@ -101,10 +108,11 @@ export interface FileRoutesById {
   '/matrix': typeof MatrixRoute
   '/relatorio': typeof RelatorioRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/supervisor': typeof SupervisorRoute
+  '/supervisor': typeof SupervisorRouteWithChildren
   '/avaliacao/$id': typeof AvaliacaoIdRoute
   '/dashboard/$id': typeof DashboardIdRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/supervisor/': typeof SupervisorIndexRoute
   '/dashboard/grupo/$id': typeof DashboardGrupoIdRoute
 }
 export interface FileRouteTypes {
@@ -119,6 +127,7 @@ export interface FileRouteTypes {
     | '/avaliacao/$id'
     | '/dashboard/$id'
     | '/dashboard/'
+    | '/supervisor/'
     | '/dashboard/grupo/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -126,10 +135,10 @@ export interface FileRouteTypes {
     | '/matrix'
     | '/relatorio'
     | '/sitemap.xml'
-    | '/supervisor'
     | '/avaliacao/$id'
     | '/dashboard/$id'
     | '/dashboard'
+    | '/supervisor'
     | '/dashboard/grupo/$id'
   id:
     | '__root__'
@@ -142,6 +151,7 @@ export interface FileRouteTypes {
     | '/avaliacao/$id'
     | '/dashboard/$id'
     | '/dashboard/'
+    | '/supervisor/'
     | '/dashboard/grupo/$id'
   fileRoutesById: FileRoutesById
 }
@@ -151,7 +161,7 @@ export interface RootRouteChildren {
   MatrixRoute: typeof MatrixRoute
   RelatorioRoute: typeof RelatorioRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
-  SupervisorRoute: typeof SupervisorRoute
+  SupervisorRoute: typeof SupervisorRouteWithChildren
   AvaliacaoIdRoute: typeof AvaliacaoIdRoute
 }
 
@@ -220,6 +230,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardIdRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/supervisor/': {
+      id: '/supervisor/'
+      path: '/'
+      fullPath: '/supervisor/'
+      preLoaderRoute: typeof SupervisorIndexRouteImport
+      parentRoute: typeof SupervisorRoute
+    }
     '/dashboard/grupo/$id': {
       id: '/dashboard/grupo/$id'
       path: '/grupo/$id'
@@ -246,13 +263,25 @@ const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
   DashboardRouteChildren,
 )
 
+interface SupervisorRouteChildren {
+  SupervisorIndexRoute: typeof SupervisorIndexRoute
+}
+
+const SupervisorRouteChildren: SupervisorRouteChildren = {
+  SupervisorIndexRoute: SupervisorIndexRoute,
+}
+
+const SupervisorRouteWithChildren = SupervisorRoute._addFileChildren(
+  SupervisorRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRouteWithChildren,
   MatrixRoute: MatrixRoute,
   RelatorioRoute: RelatorioRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
-  SupervisorRoute: SupervisorRoute,
+  SupervisorRoute: SupervisorRouteWithChildren,
   AvaliacaoIdRoute: AvaliacaoIdRoute,
 }
 export const routeTree = rootRouteImport
