@@ -18,7 +18,9 @@ import {
   Plus,
   Trash2,
   ListChecks,
+  FileText,
 } from "lucide-react";
+import { ExcelExportDialog } from "./excel-export-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -109,14 +111,16 @@ export function GroupDashboardView({ a }: { a: Assessment }) {
             label={overall.label}
             sublabel="Saúde do Grupo"
           />
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => window.print()}
-            className="print:hidden"
-          >
-            Exportar Relatório
-          </Button>
+          <div className="flex flex-wrap items-center justify-center gap-2 print:hidden">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => window.print()}
+            >
+              <FileText className="size-4" /> Exportar PDF
+            </Button>
+            <ExcelExportDialog a={a} />
+          </div>
         </div>
       </motion.section>
 
