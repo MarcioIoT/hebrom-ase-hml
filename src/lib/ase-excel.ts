@@ -48,6 +48,7 @@ export function buildAseWorkbook(
   const wb = XLSX.utils.book_new();
 
   // --- Info -----------------------------------------------------------------
+  const groupName = a.groupName || a.name;
   XLSX.utils.book_append_sheet(
     wb,
     sheet([
@@ -55,7 +56,7 @@ export function buildAseWorkbook(
       ["ASE_FORMATO", "ASE_EXCEL"],
       ["Versao", ASE_FILE_VERSION],
       ["ID da avaliacao", a.id],
-      ["Grupo", a.name],
+      ["Grupo", groupName],
       ["Rede", a.network ?? ""],
       ["Supervisor", a.supervisor ?? ""],
       ["Condutor", a.conductor],
