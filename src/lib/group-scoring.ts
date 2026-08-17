@@ -194,7 +194,7 @@ export function buildGroupSummary(a: Assessment): GroupSummary {
   ];
 
   return {
-    name: a.name,
+    name: a.groupName || a.name,
     conductor: a.conductor || "—",
     network: a.network || undefined,
     supervisor: a.supervisor || undefined,

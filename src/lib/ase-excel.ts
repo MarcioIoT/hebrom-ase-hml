@@ -48,6 +48,7 @@ export function buildAseWorkbook(
   const wb = XLSX.utils.book_new();
 
   // --- Info -----------------------------------------------------------------
+  const groupName = a.groupName || a.name;
   XLSX.utils.book_append_sheet(
     wb,
     sheet([
@@ -55,7 +56,7 @@ export function buildAseWorkbook(
       ["ASE_FORMATO", "ASE_EXCEL"],
       ["Versao", ASE_FILE_VERSION],
       ["ID da avaliacao", a.id],
-      ["Grupo", a.name],
+      ["Grupo", groupName],
       ["Rede", a.network ?? ""],
       ["Supervisor", a.supervisor ?? ""],
       ["Condutor", a.conductor],
@@ -165,7 +166,8 @@ export function buildAseWorkbook(
 
 export function exportAseExcel(a: Assessment, opts: ExcelExportOptions = {}) {
   const wb = buildAseWorkbook(a, opts);
-  const slug = a.name
+  const groupName = a.groupName || a.name;
+  const slug = groupName
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/[^a-zA-Z0-9]+/g, "-")
@@ -183,6 +185,7 @@ export function exportAseExcel(a: Assessment, opts: ExcelExportOptions = {}) {
 
 export interface ParsedAse {
   name: string;
+  groupName?: string;
   network?: string;
   supervisor?: string;
   conductor: string;
@@ -251,6 +254,7 @@ export async function parseAseWorkbook(file: File): Promise<ParsedAse> {
 
   return {
     name: info.get("Grupo") || "Avaliação importada",
+    groupName: info.get("Grupo") || undefined,
     network: info.get("Rede") || undefined,
     supervisor: info.get("Supervisor") || undefined,
     conductor: info.get("Condutor") || "",

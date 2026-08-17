@@ -58,6 +58,8 @@ export type Rede = (typeof REDES)[number];
 export interface Assessment {
   id: string;
   name: string;
+  /** Nome do grupo pré-cadastrado (usado no export e no dashboard). */
+  groupName?: string;
   network?: string;
   supervisor?: string;
   conductor: string;
