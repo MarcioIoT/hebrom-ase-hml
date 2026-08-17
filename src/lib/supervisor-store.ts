@@ -154,3 +154,58 @@ export function useSupervisorReport(id: string): SupervisorReport | undefined {
   const list = useSyncExternalStore(subscribe, snapshot, serverSnapshot);
   return list.find((r) => r.id === id);
 }
+
+// ---------------------------------------------------------------------------
+// Rede do supervisor. O supervisor escolhe a rede que ele acompanha antes de
+// importar qualquer arquivo; a importação só aceita arquivos dessa rede.
+// ---------------------------------------------------------------------------
+
+const NET_KEY = "ase.supervisor.network.v1";
+const netListeners = new Set<() => void>();
+let netCache: string | null = null;
+
+function readNetwork(): string {
+  if (typeof window === "undefined") return "";
+  try {
+    return window.localStorage.getItem(NET_KEY) ?? "";
+  } catch {
+    return "";
+  }
+}
+
+function netSnapshot(): string {
+  if (netCache === null) netCache = readNetwork();
+  return netCache;
+}
+
+function netSubscribe(cb: () => void) {
+  netListeners.add(cb);
+  return () => netListeners.delete(cb);
+}
+
+export const supervisorNetwork = {
+  get(): string {
+    return netSnapshot();
+  },
+  set(value: string) {
+    netCache = value.trim();
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem(NET_KEY, netCache);
+    }
+    netListeners.forEach((l) => l());
+  },
+};
+
+/** Normaliza para comparação de redes (case/acento/espaço-insensível). */
+export function normalizeNetwork(value?: string): string {
+  return (value ?? "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, " ");
+}
+
+export function useSupervisorNetwork(): string {
+  return useSyncExternalStore(netSubscribe, netSnapshot, () => "");
+}
