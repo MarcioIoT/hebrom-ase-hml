@@ -9,6 +9,8 @@ import {
   Users,
   Radar,
   Zap,
+  Layers,
+  Upload,
 } from "lucide-react";
 import { PURPOSES } from "@/lib/ase-content";
 import { FloatingResourcesButton } from "@/components/ase/floating-resources-button";
@@ -95,7 +97,22 @@ function Home() {
             accent="var(--color-p-discipulado)"
             cta="Abrir Dashboard"
           />
+          <ModuleCard
+            to="/supervisor"
+            icon={<Layers className="size-6" />}
+            title="Supervisor"
+            subtitle="Analisar a rede"
+            description="Importe os arquivos ASE enviados pelos condutores e acompanhe a rede em camadas: visão geral, grupo a grupo, membro a membro."
+            features={[
+              { icon: <Upload className="size-3.5" />, label: "Importa Excel" },
+              { icon: <Layers className="size-3.5" />, label: "Rede → Grupo" },
+              { icon: <Radar className="size-3.5" />, label: "Consolidado" },
+            ]}
+            accent="var(--color-p-ministerio)"
+            cta="Abrir Supervisor"
+          />
         </section>
+
       </main>
       <FloatingResourcesButton />
     </div>
@@ -112,7 +129,7 @@ function ModuleCard({
   accent,
   cta,
 }: {
-  to: "/matrix" | "/dashboard";
+  to: "/matrix" | "/dashboard" | "/supervisor";
   icon: React.ReactNode;
   title: string;
   subtitle: string;
