@@ -20,6 +20,7 @@ import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
 import { Route as DashboardIdRouteImport } from './routes/dashboard.$id'
 import { Route as SupervisorIndexRouteImport } from './routes/supervisor.index'
 import { Route as DashboardGrupoIdRouteImport } from './routes/dashboard.grupo.$id'
+import { Route as SupervisorGrupoIdRouteImport } from './routes/supervisor.grupo.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -76,6 +77,11 @@ const DashboardGrupoIdRoute = DashboardGrupoIdRouteImport.update({
   path: '/grupo/$id',
   getParentRoute: () => DashboardRoute,
 } as any)
+const SupervisorGrupoIdRoute = SupervisorGrupoIdRouteImport.update({
+  id: '/grupo/$id',
+  path: '/grupo/$id',
+  getParentRoute: () => SupervisorRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -89,6 +95,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/': typeof DashboardIndexRoute
   '/supervisor/': typeof SupervisorIndexRoute
   '/dashboard/grupo/$id': typeof DashboardGrupoIdRoute
+  '/supervisor/grupo/$id': typeof SupervisorGrupoIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -100,6 +107,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardIndexRoute
   '/supervisor': typeof SupervisorIndexRoute
   '/dashboard/grupo/$id': typeof DashboardGrupoIdRoute
+  '/supervisor/grupo/$id': typeof SupervisorGrupoIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -114,6 +122,7 @@ export interface FileRoutesById {
   '/dashboard/': typeof DashboardIndexRoute
   '/supervisor/': typeof SupervisorIndexRoute
   '/dashboard/grupo/$id': typeof DashboardGrupoIdRoute
+  '/supervisor/grupo/$id': typeof SupervisorGrupoIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -129,6 +138,7 @@ export interface FileRouteTypes {
     | '/dashboard/'
     | '/supervisor/'
     | '/dashboard/grupo/$id'
+    | '/supervisor/grupo/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -140,6 +150,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/supervisor'
     | '/dashboard/grupo/$id'
+    | '/supervisor/grupo/$id'
   id:
     | '__root__'
     | '/'
@@ -153,6 +164,7 @@ export interface FileRouteTypes {
     | '/dashboard/'
     | '/supervisor/'
     | '/dashboard/grupo/$id'
+    | '/supervisor/grupo/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -244,6 +256,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardGrupoIdRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/supervisor/grupo/$id': {
+      id: '/supervisor/grupo/$id'
+      path: '/grupo/$id'
+      fullPath: '/supervisor/grupo/$id'
+      preLoaderRoute: typeof SupervisorGrupoIdRouteImport
+      parentRoute: typeof SupervisorRoute
+    }
   }
 }
 
@@ -265,10 +284,12 @@ const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
 
 interface SupervisorRouteChildren {
   SupervisorIndexRoute: typeof SupervisorIndexRoute
+  SupervisorGrupoIdRoute: typeof SupervisorGrupoIdRoute
 }
 
 const SupervisorRouteChildren: SupervisorRouteChildren = {
   SupervisorIndexRoute: SupervisorIndexRoute,
+  SupervisorGrupoIdRoute: SupervisorGrupoIdRoute,
 }
 
 const SupervisorRouteWithChildren = SupervisorRoute._addFileChildren(
