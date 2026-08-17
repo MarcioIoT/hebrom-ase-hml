@@ -14,6 +14,7 @@ import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as MatrixRouteImport } from './routes/matrix'
 import { Route as RelatorioRouteImport } from './routes/relatorio'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as SupervisorRouteImport } from './routes/supervisor'
 import { Route as AvaliacaoIdRouteImport } from './routes/avaliacao.$id'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
 import { Route as DashboardIdRouteImport } from './routes/dashboard.$id'
@@ -44,6 +45,11 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SupervisorRoute = SupervisorRouteImport.update({
+  id: '/supervisor',
+  path: '/supervisor',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AvaliacaoIdRoute = AvaliacaoIdRouteImport.update({
   id: '/avaliacao/$id',
   path: '/avaliacao/$id',
@@ -71,6 +77,7 @@ export interface FileRoutesByFullPath {
   '/matrix': typeof MatrixRoute
   '/relatorio': typeof RelatorioRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/supervisor': typeof SupervisorRoute
   '/avaliacao/$id': typeof AvaliacaoIdRoute
   '/dashboard/$id': typeof DashboardIdRoute
   '/dashboard/': typeof DashboardIndexRoute
@@ -81,6 +88,7 @@ export interface FileRoutesByTo {
   '/matrix': typeof MatrixRoute
   '/relatorio': typeof RelatorioRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/supervisor': typeof SupervisorRoute
   '/avaliacao/$id': typeof AvaliacaoIdRoute
   '/dashboard/$id': typeof DashboardIdRoute
   '/dashboard': typeof DashboardIndexRoute
@@ -93,6 +101,7 @@ export interface FileRoutesById {
   '/matrix': typeof MatrixRoute
   '/relatorio': typeof RelatorioRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/supervisor': typeof SupervisorRoute
   '/avaliacao/$id': typeof AvaliacaoIdRoute
   '/dashboard/$id': typeof DashboardIdRoute
   '/dashboard/': typeof DashboardIndexRoute
@@ -106,6 +115,7 @@ export interface FileRouteTypes {
     | '/matrix'
     | '/relatorio'
     | '/sitemap.xml'
+    | '/supervisor'
     | '/avaliacao/$id'
     | '/dashboard/$id'
     | '/dashboard/'
@@ -116,6 +126,7 @@ export interface FileRouteTypes {
     | '/matrix'
     | '/relatorio'
     | '/sitemap.xml'
+    | '/supervisor'
     | '/avaliacao/$id'
     | '/dashboard/$id'
     | '/dashboard'
@@ -127,6 +138,7 @@ export interface FileRouteTypes {
     | '/matrix'
     | '/relatorio'
     | '/sitemap.xml'
+    | '/supervisor'
     | '/avaliacao/$id'
     | '/dashboard/$id'
     | '/dashboard/'
@@ -139,6 +151,7 @@ export interface RootRouteChildren {
   MatrixRoute: typeof MatrixRoute
   RelatorioRoute: typeof RelatorioRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  SupervisorRoute: typeof SupervisorRoute
   AvaliacaoIdRoute: typeof AvaliacaoIdRoute
 }
 
@@ -177,6 +190,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/supervisor': {
+      id: '/supervisor'
+      path: '/supervisor'
+      fullPath: '/supervisor'
+      preLoaderRoute: typeof SupervisorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/avaliacao/$id': {
@@ -232,6 +252,7 @@ const rootRouteChildren: RootRouteChildren = {
   MatrixRoute: MatrixRoute,
   RelatorioRoute: RelatorioRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  SupervisorRoute: SupervisorRoute,
   AvaliacaoIdRoute: AvaliacaoIdRoute,
 }
 export const routeTree = rootRouteImport
