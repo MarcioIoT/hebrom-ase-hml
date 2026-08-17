@@ -166,7 +166,8 @@ export function buildAseWorkbook(
 
 export function exportAseExcel(a: Assessment, opts: ExcelExportOptions = {}) {
   const wb = buildAseWorkbook(a, opts);
-  const slug = a.name
+  const groupName = a.groupName || a.name;
+  const slug = groupName
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/[^a-zA-Z0-9]+/g, "-")
