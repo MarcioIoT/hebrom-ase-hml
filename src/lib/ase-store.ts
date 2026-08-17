@@ -244,6 +244,7 @@ export const store = {
   /** Cria uma avaliação a partir de um arquivo padrão ASE (Excel). */
   importAssessment(input: {
     name: string;
+    groupName?: string;
     network?: string;
     supervisor?: string;
     conductor?: string;
@@ -271,6 +272,7 @@ export const store = {
     const a: Assessment = {
       id: uid(),
       name: input.name.trim() || "Avaliação importada",
+      groupName: input.groupName?.trim() || undefined,
       network: input.network?.trim() || undefined,
       supervisor: input.supervisor?.trim() || undefined,
       conductor: input.conductor?.trim() || "",
