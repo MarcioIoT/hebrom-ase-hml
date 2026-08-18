@@ -74,9 +74,7 @@ function SupervisorHome() {
             <span className="mx-auto grid size-14 place-items-center rounded-2xl bg-primary/10 text-primary">
               <Layers className="size-7" />
             </span>
-            <h1 className="mt-4 font-display text-2xl font-bold">
-              Rede {network}
-            </h1>
+            <h1 className="mt-4 font-display text-2xl font-bold">{network}</h1>
             <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
               Importe os arquivos Excel que os condutores da sua rede exportaram
               após o ASE. O sistema consolida tudo: visão geral da rede, depois
