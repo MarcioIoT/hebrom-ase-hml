@@ -2,8 +2,16 @@ import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, Layers, Upload, Network, Pencil, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { REDES } from "@/lib/ase-types";
+
 import { ThemeToggle } from "@/components/ase/theme-toggle";
 import { ImportReportsButton } from "@/components/supervisor/import-reports-button";
 import { NetworkOverview } from "@/components/supervisor/network-overview";
