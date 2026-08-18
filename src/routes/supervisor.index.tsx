@@ -138,14 +138,20 @@ function NetworkSetup({
       >
         <div className="space-y-1.5">
           <Label htmlFor="sup-network">Rede</Label>
-          <Input
-            id="sup-network"
-            autoFocus
-            placeholder="Ex.: Rede Norte"
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-          />
+          <Select value={value} onValueChange={setValue}>
+            <SelectTrigger id="sup-network">
+              <SelectValue placeholder="Selecione a rede" />
+            </SelectTrigger>
+            <SelectContent>
+              {REDES.map((r) => (
+                <SelectItem key={r} value={r}>
+                  {r}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
+
         {current && hasReports && trimmed && trimmed !== current && (
           <p className="text-xs text-muted-foreground">
             Os relatórios já importados da rede {current} continuam na lista —
