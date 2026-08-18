@@ -2,8 +2,16 @@ import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, Layers, Upload, Network, Pencil, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { REDES } from "@/lib/ase-types";
+
 import { ThemeToggle } from "@/components/ase/theme-toggle";
 import { ImportReportsButton } from "@/components/supervisor/import-reports-button";
 import { NetworkOverview } from "@/components/supervisor/network-overview";
@@ -138,14 +146,20 @@ function NetworkSetup({
       >
         <div className="space-y-1.5">
           <Label htmlFor="sup-network">Rede</Label>
-          <Input
-            id="sup-network"
-            autoFocus
-            placeholder="Ex.: Rede Norte"
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-          />
+          <Select value={value} onValueChange={setValue}>
+            <SelectTrigger id="sup-network">
+              <SelectValue placeholder="Selecione a rede" />
+            </SelectTrigger>
+            <SelectContent>
+              {REDES.map((r) => (
+                <SelectItem key={r} value={r}>
+                  {r}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
+
         {current && hasReports && trimmed && trimmed !== current && (
           <p className="text-xs text-muted-foreground">
             Os relatórios já importados da rede {current} continuam na lista —
