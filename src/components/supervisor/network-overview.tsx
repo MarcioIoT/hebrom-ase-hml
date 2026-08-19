@@ -282,6 +282,9 @@ export function NetworkOverview({
         </div>
       </section>
 
+      {/* Imports */}
+      <ImportsList reports={reports} />
+
       {/* Priority members across the network */}
       {s.priorityMembers.length > 0 && (
         <section className="rounded-2xl border bg-card p-5 shadow-soft">
