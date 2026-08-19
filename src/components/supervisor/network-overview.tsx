@@ -26,6 +26,7 @@ import {
   DistributionBar,
   MiniRadar,
 } from "@/components/dashboard/charts";
+import { ImportsList } from "@/components/supervisor/imports-list";
 
 export function NetworkOverview({
   reports,
@@ -280,6 +281,9 @@ export function NetworkOverview({
           ))}
         </div>
       </section>
+
+      {/* Imports */}
+      <ImportsList reports={reports} />
 
       {/* Priority members across the network */}
       {s.priorityMembers.length > 0 && (
